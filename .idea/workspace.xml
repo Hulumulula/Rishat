@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4894d391-e173-494c-bd93-9f002af1f018" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/payment/templates/payment/item-info.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/templates/payment/item-list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rishat/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Rishat/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/templates/payment/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/payment/templates/payment/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/templates/payment/item-info.html" beforeDir="false" afterPath="$PROJECT_DIR$/payment/templates/payment/item-info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/templates/payment/item-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/payment/templates/payment/item-list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment/views.py" afterDir="false" />
     </list>
@@ -16,8 +19,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -76,7 +79,7 @@
       <updated>1676146498617</updated>
       <workItem from="1676146510941" duration="1650000" />
       <workItem from="1676278076601" duration="637000" />
-      <workItem from="1676364954920" duration="1262000" />
+      <workItem from="1676364954920" duration="3778000" />
     </task>
     <servers />
   </component>

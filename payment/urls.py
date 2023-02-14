@@ -1,5 +1,8 @@
 from django.urls import path
 
+from .views import *
+
+
 urlpatterns = [
     path('buy/<int:id>', StripePaymentIntentView.as_view(), name='buy'),
     path('item/<int:id>', ItemInfoView.as_view(), name='item'),

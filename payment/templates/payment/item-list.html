@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'payment/base.html' %}
 
-</body>
-</html>
+{% block title %}
+    <title>{{ title }}</title>
+{% endblock %}
+
+{% block content %}
+    {% for item in items %}
+        {{ item.name }}
+        {{ item.description }}
+        {{ item.price }}
+    {% endfor %}
+{% endblock %}
