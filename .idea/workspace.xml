@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4894d391-e173-494c-bd93-9f002af1f018" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/payment/static/payment/css/stripe.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment/static/payment/js/stripe.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Rishat/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Rishat/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/static/payment/js/stripe.js" beforeDir="false" afterPath="$PROJECT_DIR$/payment/static/payment/js/stripe.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/templates/payment/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/payment/templates/payment/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment/templates/payment/item-info.html" beforeDir="false" afterPath="$PROJECT_DIR$/payment/templates/payment/item-info.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/templates/payment/item-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/payment/templates/payment/item-list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment/utils.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/payment/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,13 +19,21 @@
       <list>
         <option value="HTML File" />
         <option value="Python Script" />
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -48,6 +53,11 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="settings.editor.selected.configurable" value="application.passwordSafe" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Aleksandr\Desktop\Rishat\Rishat" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Rishat" type="Python.DjangoServer" factoryName="Django server">
       <module name="Rishat" />
@@ -55,6 +65,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="Rishat.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -84,7 +95,7 @@
       <workItem from="1676146510941" duration="1650000" />
       <workItem from="1676278076601" duration="637000" />
       <workItem from="1676364954920" duration="11363000" />
-      <workItem from="1676449100367" duration="1795000" />
+      <workItem from="1676449100367" duration="16664000" />
     </task>
     <servers />
   </component>

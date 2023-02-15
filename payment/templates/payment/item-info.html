@@ -17,17 +17,22 @@
 
     <form id="payment-form">
         {% csrf_token %}
-        <input type="text" id="email" placeholder="Email address" />
-        <div id="card-element"><!--Stripe.js injects the Card Element--></div>
+        <div id="link-authentication-element">
+            <!--Stripe.js injects the Link Authentication Element-->
+        </div>
+        <div id="payment-element">
+            <!--Stripe.js injects the Payment Element-->
+        </div>
         <button id="submit">
             <div class="spinner hidden" id="spinner"></div>
-            <span id="button-text">Pay</span>
+            <span id="button-text">Pay now</span>
         </button>
-        <p id="card-error" role="alert"></p>
-        <p class="result-message hidden">
-            Payment succeeded, see the result in your
-            <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
-        </p>
+        <div id="payment-message" class="hidden"></div>
     </form>
+    <script>
+        const url = "{% url 'create-payment-intent' item.id %}";
+        const return_url = "{% url 'items' %}";
+        const st = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+    </script>
     <script src="{% static 'payment/js/stripe.js' %}"></script>
 {% endblock %}
