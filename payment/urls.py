@@ -4,7 +4,7 @@ from .views import *
 
 
 urlpatterns = [
-    path('buy/<int:id>', StripePaymentIntentView.as_view(), name='buy'),
+    path('buy/<int:id>', StripePaymentIntentView.as_view(), name='create-payment-intent'),
     path('item/<int:id>', ItemInfoView.as_view(), name='item'),
     path('items/', ItemsListView.as_view(), name='items'),
 

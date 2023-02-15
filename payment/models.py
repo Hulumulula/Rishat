@@ -13,3 +13,8 @@ class Item(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name = 'Товары'
+        verbose_name_plural = 'Товар'
