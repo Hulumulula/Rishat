@@ -1,10 +1,16 @@
 import json
 import stripe
+from django.contrib.auth import logout, login
+from django.contrib.auth.views import LoginView
 
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.views import generic, View
 from django.conf import settings
 
+from cart.forms import CartAddItemForm
+from .forms import *
 from .models import *
 
 
@@ -18,8 +24,10 @@ class ItemsListView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        cart_product_form = CartAddItemForm()
         context.update({
-            "title": "Список товаров"
+            "title": "Список товаров",
+            'cart_product_form': cart_product_form,
         })
         return context
 
@@ -35,10 +43,12 @@ class ItemInfoView(generic.DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        item = Item.objects.get(id=self.kwargs.get('id'))
+        item = get_object_or_404(Item, id=self.kwargs.get('id'))
+        cart_product_form = CartAddItemForm()
         context.update({
             "title": "Товар",
             "item": item,
+            'cart_product_form': cart_product_form,
             "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY
         })
         return context
@@ -65,3 +75,45 @@ class StripePaymentIntentView(View):
             })
         except Exception as e:
             return JsonResponse({"error": str(e)})
+
+
+class RegisterUser(generic.CreateView):
+    form_class = RegisterUserForm
+    template_name = 'payment/register.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                'title': 'Регистрация',
+            }
+        )
+        return context
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
+
+class LoginUser(LoginView):
+    form_class = LoginUserForm
+    template_name = 'payment/login.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                'title': 'Авторизация',
+            }
+        )
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('payment:items')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('payment:items')

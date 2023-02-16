@@ -1,4 +1,5 @@
 {% extends 'payment/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}
     <title>{{ title }}</title>
@@ -7,10 +8,13 @@
 {% block content %}
     {% for item in items %}
         <div>
-            <p>
-                {{ item.name }}
-                <a href="{% url 'item' item.id %}">Ссылочка</a>
-            </p>
+            {{ item.name }}
+            <a href="{% url 'payment:item' item.id %}">Купить сразу</a>
+            <form action="{% url "cart:cart_add" item.id %}" method="post">
+                {% crispy cart_product_form %}
+                {% csrf_token %}
+                <button type="submit" value="Add to cart">Добавить в корзину</button>
+            </form>
         </div>
     {% endfor %}
 {% endblock %}

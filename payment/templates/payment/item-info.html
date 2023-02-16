@@ -30,8 +30,8 @@
         <div id="payment-message" class="hidden"></div>
     </form>
     <script>
-        const url = "{% url 'create-payment-intent' item.id %}";
-        const return_url = "{% url 'items' %}";
+        const url = "{% url 'payment:create-payment-intent' item.id %}";
+        const return_url = "{% url 'payment:items' %}";
         const st = Stripe("{{ STRIPE_PUBLIC_KEY }}");
     </script>
     <script src="{% static 'payment/js/stripe.js' %}"></script>
