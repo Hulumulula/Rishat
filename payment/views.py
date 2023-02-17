@@ -115,7 +115,9 @@ class RegisterUser(generic.CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        old_session = self.request.session
         login(self.request, user)
+        self.request.session = old_session
         return redirect('payment:items')
 
 
@@ -139,3 +141,7 @@ class LoginUser(LoginView):
 def logout_user(request):
     logout(request)
     return redirect('payment:items')
+
+
+def page_not_found(request, exception):
+    return render(request, 'payment/404.html')

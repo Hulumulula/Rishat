@@ -16,8 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from payment.views import page_not_found
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cart/', include(('cart.urls', 'cart'), namespace='shop')),
     path('payment/', include(('payment.urls', 'payment'), namespace='payment')),
 ]
+
+handler404 = page_not_found

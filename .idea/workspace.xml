@@ -45,17 +45,17 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/payment/static/payment" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/payment/templates/payment" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="settings.editor.selected.configurable" value="application.passwordSafe" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Aleksandr\Desktop\Rishat\payment\templates\payment" />
       <recent name="C:\Users\Aleksandr\Desktop\Rishat\payment\static\payment" />
       <recent name="C:\Users\Aleksandr\Desktop\Rishat\payment\static\payment\images" />
       <recent name="C:\Users\Aleksandr\Desktop\Rishat\payment\static\payment\webfonts" />
       <recent name="C:\Users\Aleksandr\Desktop\Rishat\payment\static\payment\fonts" />
-      <recent name="C:\Users\Aleksandr\Desktop\Rishat\payment\static\payment\js" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Aleksandr\Desktop\Rishat\Rishat" />
@@ -101,7 +101,7 @@
       <workItem from="1676449100367" duration="16995000" />
       <workItem from="1676551496501" duration="9071000" />
       <workItem from="1676565373684" duration="16851000" />
-      <workItem from="1676623682962" duration="21748000" />
+      <workItem from="1676623682962" duration="25823000" />
     </task>
     <servers />
   </component>

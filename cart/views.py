@@ -17,7 +17,7 @@ def cart_add(request, item_id):
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
 
-    return redirect('cart:cart_detail')
+    return redirect('payment:items')
 
 
 def cart_remove(request, item_id):
