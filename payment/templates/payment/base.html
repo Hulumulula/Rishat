@@ -6,25 +6,325 @@
     <meta charset="UTF-8">
     <meta name="description" content="A demo of a payment on Stripe" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Dark mode -->
+	<script>
+		const storedTheme = localStorage.getItem('theme')
+
+		const getPreferredTheme = () => {
+			if (storedTheme) {
+				return storedTheme
+			}
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+		}
+
+		const setTheme = function (theme) {
+			if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				document.documentElement.setAttribute('data-bs-theme', 'dark')
+			} else {
+				document.documentElement.setAttribute('data-bs-theme', theme)
+			}
+		}
+
+		setTheme(getPreferredTheme())
+
+		window.addEventListener('DOMContentLoaded', () => {
+		    var el = document.querySelector('.theme-icon-active');
+			if (el != 'undefined' && el != null) {
+				const showActiveTheme = theme => {
+				const activeThemeIcon = document.querySelector('.theme-icon-active use')
+				const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+				const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+
+				document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+					element.classList.remove('active')
+				})
+
+				btnToActive.classList.add('active')
+				activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+			}
+
+			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+				if (storedTheme !== 'light' || storedTheme !== 'dark') {
+					setTheme(getPreferredTheme())
+				}
+			})
+
+			showActiveTheme(getPreferredTheme())
+
+			document.querySelectorAll('[data-bs-theme-value]')
+				.forEach(toggle => {
+					toggle.addEventListener('click', () => {
+						const theme = toggle.getAttribute('data-bs-theme-value')
+						localStorage.setItem('theme', theme)
+						setTheme(theme)
+						showActiveTheme(theme)
+					})
+				})
+
+			}
+		})
+
+	</script>
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="{% static 'payment/images/favicon.ico' %}">
+
+	<!-- Google Font -->
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+
+	<!-- Plugins CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static 'payment/css/all.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'payment/css/bootstrap-icons.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'payment/css/tiny-slider.css' %}">
+
+	<!-- Theme CSS -->
+	<link id="style-switch" rel="stylesheet" type="text/css" href="{% static 'payment/css/style.css' %}">
+
     {% block title %}
         <title></title>
     {% endblock %}
 </head>
 <body>
-    <div>
-        {% with total_items=cart|length %}
-            {% if cart|length > 0 %}
-                Your cart:
-                <a href="{% url "cart:cart_detail" %}">
-                    {{ total_items }} item{{ total_items|pluralize }},
-                    ${{ cart.get_total_price }}
-                </a>
-            {% else %}
-                Your cart is empty.
-            {% endif %}
-        {% endwith %}
+	<!-- Offcanvas START -->
+	<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMenu">
+		<!-- Offcanvas header -->
+		<div class="offcanvas-header justify-content-between border-bottom px-3">
+			<h3 class="mb-0">Your Cart</h3>
+			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+
+		<!-- Offcanvas body -->
+		<div class="offcanvas-body d-flex flex-column px-3">
+            {% for item in cart %}
+			    {% with product=item.product %}
+                    <div class="row g-3">
+                        <!-- Image -->
+                        <div class="col-3">
+                            <img class="rounded-2 bg-light p-2" src="
+                                {% if product.image %}
+                                    {{ product.image.url }}
+                                {% else %}
+                                    {% static "payment/images/no_image.png" %}
+                                {% endif %}
+                            " alt="avatar">
+                        </div>
+
+                        <div class="col-6">
+                            <h6 class="mb-1">{{ product.name }}</h6>
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-0 text-success">{{ product.currency }}{{ product.price }}</h6>
+                                <a href="{% url "cart:cart_remove" product.id%}" class="btn btn-sm btn-link">Remove</a>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <!-- Select item -->
+                            <div class="text-center">{{ item.quantity }}</div>
+                        </div>
+                    </div>
+                {% endwith %}
+            {% endfor %}
+
+			<!-- Button and price -->
+			<div class="mt-auto">
+				<div class="d-flex justify-content-between mb-2">
+					<h6 class="mb-0">Subtotal</h6>
+					<h5 class="text-success mb-0">${{ cart.get_total_price }}</h5>
+				</div>
+				<!-- Button -->
+				<div class="d-grid">
+					<a href="{% url 'payment:order_create' %}" class="btn btn-lg btn-primary-soft mb-0">Continue to Checkout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Offcanvas END -->
+
+<!-- =======================
+Header START -->
+<header class="navbar-light navbar-sticky header-static">
+	<!-- Logo Nav START -->
+	<nav class="navbar navbar-expand-xl">
+		<div class="container">
+			<!-- Logo START -->
+			<a class="navbar-brand" href="{% url 'payment:items' %}">
+				<img class="navbar-brand-item light-mode-item" src="{% static 'payment/images/logo-shop-light.svg' %}" alt="logo" >
+				<img class="navbar-brand-item dark-mode-item" src="{% static 'payment/images/logo-shop-dark.svg' %}" alt="logo">
+			</a>
+			<!-- Logo END -->
+
+			<!-- Responsive navbar toggler -->
+			<button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="text-body h6 d-none d-sm-inline-block">Menu</span>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- Main navbar START -->
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<!-- Nav Search START -->
+				<div class="nav mt-3 mt-lg-0 px-4 flex-nowrap align-items-center">
+					<div class="nav-item w-100">
+						<form class="rounded position-relative">
+							<input class="form-control pe-5 bg-light" type="search" placeholder="Search the products" aria-label="Search">
+							<button class="btn bg-transparent border-0 px-2 py-0 position-absolute top-50 end-0 translate-middle-y" type="submit"><i class="bi bi-search fs-5"> </i></button>
+						</form>
+					</div>
+				</div>
+				<!-- Nav Search END -->
+				<ul class="navbar-nav navbar-nav-scroll ms-auto">
+
+					<!-- Nav item 1 shop all -->
+					<li class="nav-item"> <a class="nav-link" href="{% url 'payment:items' %}">Shop</a></li>
+                    <div class="vr" style="margin: 1rem 0;
+                                           color: var(--bs-gray-500);
+                                           border: 0;
+                                           border-top: var(--bs-border-width) solid;
+                                           opacity: 0.25;">
+
+                    </div>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item"> <a class="nav-link" href="{% url 'payment:logout' %}">Logout</a></li>
+                    {% else %}
+                        <li class="nav-item"> <a class="nav-link" href="{% url 'payment:login' %}">Login</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="{% url 'payment:register' %}">Register</a></li>
+                    {% endif %}
+				</ul>
+			</div>
+			<!-- Main navbar END -->
+
+			<div class="nav flex-nowrap align-items-center ms-3 ms-lg-4">
+                <!-- Dark mode options START -->
+				<div class="nav-item dropdown">
+					<!-- Switch button -->
+					<button class="modeswitch" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static">
+						<svg class="theme-icon-active"><use href="#"></use></svg>
+					</button>
+					<!-- Dropdown items -->
+					<ul class="dropdown-menu min-w-auto dropdown-menu-end" aria-labelledby="bd-theme">
+						<li class="mb-1">
+							<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light">
+								<svg width="16" height="16" fill="currentColor" class="bi bi-brightness-high-fill fa-fw mode-switch me-1" viewBox="0 0 16 16">
+									<path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+									<use href="#"></use>
+								</svg>Light
+							</button>
+						</li>
+						<li class="mb-1">
+							<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon-stars-fill fa-fw mode-switch me-1" viewBox="0 0 16 16">
+									<path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"></path>
+									<path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"></path>
+									<use href="#"></use>
+								</svg>Dark
+							</button>
+						</li>
+						<li>
+							<button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-half fa-fw mode-switch me-1" viewBox="0 0 16 16">
+									<path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"></path>
+									<use href="#"></use>
+								</svg>Auto
+							</button>
+						</li>
+					</ul>
+				</div>
+				<!-- Dark mode options END -->
+				<!-- Offcanvas menu toggler -->
+				<div class="nav-item position-relative ms-3">
+					<a class="nav-link btn btn-light btn-round mb-0" data-bs-toggle="offcanvas" href="#offcanvasMenu" role="button" aria-controls="offcanvasMenu">
+                        <i class="bi bi-cart3 fa-fw" data-bs-target="#offcanvasMenu"></i>
+					</a>
+					<span class="position-absolute top-0 start-100 translate-middle badge smaller rounded-circle bg-dark mt-xl-2 ms-n1">{{ cart|length }}
+						<span class="visually-hidden">unread messages</span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<!-- Logo Nav END -->
+</header>
+<!-- =======================
+Header END -->
+
+<!-- **************** MAIN CONTENT START **************** -->
+<main>
+    <section class="bg-light">
+        {% block content %}
+        {% endblock %}
+    </section>
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+
+<!-- =======================
+Footer START -->
+<footer class="bg-dark pt-5">
+	<div class="container">
+		<!-- About and Newsletter START -->
+		<div class="row pt-3 pb-4">
+			<div class="col-md-3">
+				<img src="{% static 'payment/images/logo-footer.svg' %}" alt="footer logo">
+			</div>
+			<div class="col-md-5">
+				<p class="text-muted">Исходный код этого приложения можно посмотреть в моём GitHub, щёлкнув по иконке справа.</p>
+			</div>
+			<div class="col-md-4 text-center">
+				<!-- GitHub url -->
+                <a href="https://www.github.com/hulumulula/rishat">
+                    <img src="{% static 'payment/images/github.svg' %}" alt="footer github">
+			    </a>
+            </div>
+		</div>
+		<!-- About and Newsletter END -->
+
+		<!-- Divider -->
+		<hr>
     </div>
-    {% block content %}
-    {% endblock %}
+
+	<!-- Footer copyright START -->
+	<div class="bg-dark-overlay-3 mt-5">
+		<div class="container">
+			<div class="row align-items-center justify-content-md-between py-4">
+				<div class="col-md-6">
+					<!-- Copyright -->
+					<div class="text-center text-md-start text-primary-hover text-muted">©2023 <a href="https://www.github.com/hulumulula" class="text-reset btn-link" target="_blank">Hulumulula</a>. All rights reserved
+					</div>
+				</div>
+				<div class="col-md-6 d-sm-flex align-items-center justify-content-center justify-content-md-end">
+					<!-- Language switcher -->
+					<div class="dropup me-0 me-sm-3 mt-3 mt-md-0 text-center text-sm-end">
+						<a class="dropdown-toggle text-primary-hover" href="#" role="button" id="languageSwitcher" data-bs-toggle="dropdown" aria-expanded="false">
+							English Edition
+						</a>
+						<ul class="dropdown-menu min-w-auto" aria-labelledby="languageSwitcher">
+							<li><a class="dropdown-item" href="#">English</a></li>
+							<li><a class="dropdown-item" href="#">Russian </a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer copyright END -->
+</footer>
+<!-- =======================
+Footer END -->
+
+<!-- Back to top -->
+<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
+
+<!-- =======================
+JS libraries, plugins and custom scripts -->
+
+<!-- Bootstrap JS -->
+<script src="{% static 'payment/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Vendors -->
+<script src="{% static 'payment/js/tiny-slider.js' %}"></script>
+
+<!-- Template Functions -->
+<script src="{% static 'payment/js/functions.js' %}"></script>
+
 </body>
 </html>

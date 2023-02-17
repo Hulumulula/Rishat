@@ -1,0 +1,39 @@
+{% extends 'payment/base.html' %}
+
+{% block content %}
+    <!-- =======================
+Inner intro START -->
+<section>
+	<div class="container">
+		<div class="row">
+            <div class="col-md-10 col-lg-8 col-xl-6 mx-auto">
+                <div class="p-4 p-sm-5 bg-primary bg-opacity-10 rounded">
+                    <h2>Log in to your account</h2>
+                    <!-- Form START -->
+                    <form class="mt-4" method="post">
+                        {{ form }}
+                        <!-- Checkbox -->
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">keep me signed in</label>
+                        </div>
+                        <!-- Button -->
+                        <div class="row align-items-center">
+                            <div class="col-sm-4">
+                                <button type="submit" class="btn btn-success">Sign me in</button>
+                            </div>
+                            <div class="col-sm-8 text-sm-end">
+                                <span>Don't have an account? <a href="{% url 'payment:register' %}"><u>Register</u></a></span>
+                            </div>
+                        </div>
+                        {% csrf_token %}
+                    </form>
+                </div>
+            </div>
+        </div>
+	</div>
+</section>
+<!-- =======================
+Inner intro END -->
+
+{% endblock %}

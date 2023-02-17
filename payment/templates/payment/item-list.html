@@ -1,20 +1,320 @@
 {% extends 'payment/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block title %}
     <title>{{ title }}</title>
 {% endblock %}
 
 {% block content %}
-    {% for item in items %}
-        <div>
-            {{ item.name }}
-            <a href="{% url 'payment:item' item.id %}">Купить сразу</a>
-            <form action="{% url "cart:cart_add" item.id %}" method="post">
-                {% crispy cart_product_form %}
-                {% csrf_token %}
-                <button type="submit" value="Add to cart">Добавить в корзину</button>
-            </form>
+    <section class="pt-3 pt-lg-5">
+	<div class="container">
+		<div class="row">
+        <!-- Title -->
+        <div class="mb-4">
+        <h2 class="m-0">Searched Products</h2>
         </div>
-    {% endfor %}
+			<!-- Filter START -->
+			<aside class="col-xl-4 col-xxl-3">
+				<!-- Responsive offcanvas body START -->
+				<div class="offcanvas-xl offcanvas-end" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+					<div class="offcanvas-header bg-light">
+						<h5 class="offcanvas-title" id="offcanvasSidebarLabel">Advance Filter</h5>
+						<button  type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasSidebar" aria-label="Close"></button>
+					</div>
+					<div class="offcanvas-body flex-column p-3 p-xl-0">
+						<form class="border rounded-2">
+							<!-- Availability START -->
+							<div class="card card-body">
+								<!-- Title -->
+								<h6 class="mb-3">Availability</h6>
+
+								<!-- Availability group -->
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+									<label class="form-check-label" for="flexRadioDefault1">
+										All
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+									<label class="form-check-label" for="flexRadioDefault2">
+										On Stock Only
+									</label>
+								</div>
+							</div>
+							<!-- Availability END -->
+
+							<hr class="my-0"> <!-- Divider -->
+
+							<!-- Offer type START -->
+							<div class="card card-body">
+								<!-- Title -->
+								<h6 class="mb-3">Offer Type</h6>
+
+								<!-- Checkbox -->
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value="" id="amenitiesType1">
+									<label class="form-check-label" for="amenitiesType1">Product in Sale Only</label>
+								</div>
+								<!-- Checkbox -->
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value="" id="amenitiesType2">
+									<label class="form-check-label" for="amenitiesType2">Recommended Only</label>
+								</div>
+							</div>
+							<!-- Offer type END -->
+
+							<hr class="my-0"> <!-- Divider -->
+
+							<!-- Brands START -->
+							<div class="card card-body">
+								<!-- Title -->
+								<h6 class="mb-2">Brands</h6>
+								<!-- Amenities group -->
+								<div class="col-12">
+
+									<!-- Checkbox -->
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" value="" id="amenitiesType11">
+										<label class="form-check-label" for="amenitiesType11">Shimano</label>
+									</div>
+									<!-- Checkbox -->
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" value="" id="amenitiesType12">
+										<label class="form-check-label" for="amenitiesType12">Shimano SSC</label>
+									</div>
+									<!-- Checkbox -->
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" value="" id="amenitiesType13">
+										<label class="form-check-label" for="amenitiesType13">Pearl Izumi</label>
+									</div>
+									<!-- Checkbox -->
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" value="" id="amenitiesType14">
+										<label class="form-check-label" for="amenitiesType14">Pro</label>
+									</div>
+
+									<!-- Collapse body -->
+									<div class="multi-collapse collapse" id="amenitiesCollapes">
+										<!-- Checkbox -->
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="amenitiesType15">
+											<label class="form-check-label" for="amenitiesType15">Wizxo</label>
+										</div>
+										<!-- Checkbox -->
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="amenitiesType16">
+											<label class="form-check-label" for="amenitiesType16">Orange Casidy</label>
+										</div>
+										<!-- Checkbox -->
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="amenitiesType17">
+											<label class="form-check-label" for="amenitiesType17">Hair nets</label>
+										</div>
+										<!-- Checkbox -->
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="amenitiesType18">
+											<label class="form-check-label" for="amenitiesType18">Masks</label>
+										</div>
+									</div>
+									<!-- Collapse button -->
+									<a class="p-0 mb-0 mt-2 btn-more d-flex align-items-center collapsed" data-bs-toggle="collapse" href="#amenitiesCollapes" role="button" aria-expanded="false" aria-controls="amenitiesCollapes">
+										See <span class="see-more ms-1">more</span><span class="see-less ms-1">less</span><i class="fas fa-angle-down ms-2"></i>
+									</a>
+								</div>
+							</div>
+							<!-- Brands END -->
+
+							<hr class="my-0"> <!-- Divider -->
+
+							<!-- Rating Star START -->
+							<div class="card card-body">
+								<!-- Title -->
+								<h6 class="mb-2">Rating Star</h6>
+								<!-- Rating Star group -->
+								<ul class="list-inline mb-0 g-3">
+									<!-- Item -->
+									<li class="list-inline-item mb-0">
+										<input type="checkbox" class="btn-check" id="btn-check-6">
+										<label class="btn btn-sm btn-light btn-primary-soft-check" for="btn-check-6">1<i class="bi bi-star-fill"></i></label>
+									</li>
+									<!-- Item -->
+									<li class="list-inline-item mb-0">
+										<input type="checkbox" class="btn-check" id="btn-check-7">
+										<label class="btn btn-sm btn-light btn-primary-soft-check" for="btn-check-7">2<i class="bi bi-star-fill"></i></label>
+									</li>
+									<!-- Item -->
+									<li class="list-inline-item mb-0">
+										<input type="checkbox" class="btn-check" id="btn-check-8">
+										<label class="btn btn-sm btn-light btn-primary-soft-check" for="btn-check-8">3<i class="bi bi-star-fill"></i></label>
+									</li>
+									<!-- Item -->
+									<li class="list-inline-item mb-0">
+										<input type="checkbox" class="btn-check" id="btn-check-15">
+										<label class="btn btn-sm btn-light btn-primary-soft-check" for="btn-check-15">4<i class="bi bi-star-fill"></i></label>
+									</li>
+									<!-- Item -->
+									<li class="list-inline-item mb-0">
+										<input type="checkbox" class="btn-check" id="btn-check-16">
+										<label class="btn btn-sm btn-light btn-primary-soft-check" for="btn-check-16">5<i class="bi bi-star-fill"></i></label>
+									</li>
+								</ul>
+							</div>
+							<!-- Rating Star END -->
+						</form><!-- Form End -->
+					</div>
+					<!-- Buttons -->
+					<div class="d-flex justify-content-between p-2 p-xl-0 mt-xl-3">
+						<button class="btn btn-link p-0 mb-0">Clear all</button>
+						<button class="btn btn-primary mb-0">Filter Result</button>
+					</div>
+				</div>
+				<!-- Responsive offcanvas body END -->
+			</aside>
+			<!-- Filter END -->
+
+			<!-- Main part START -->
+			<div class="col-xl-9">
+
+				<!-- Search filter START -->
+				<form class="row g-2 g-xl-4 mb-4">
+					<!-- Search -->
+					<div class="col-xl-6">
+            <div class="rounded position-relative">
+							<input class="form-control pe-5" type="search" placeholder="Search products by name or keyword..." aria-label="Search">
+							<button class="btn bg-transparent border-0 px-2 py-0 position-absolute top-50 end-0 translate-middle-y" type="submit"><i class="bi bi-search fs-5"> </i></button>
+						</div>
+					</div>
+
+					<!-- Select -->
+					<div class="col-md-4 col-xl-3">
+						<select class="form-select" aria-label="Default select example">
+							<option selected>Filter</option>
+							<option value="1">T-shirts</option>
+							<option value="2">Shoes</option>
+							<option value="3">Tracking bags</option>
+						</select>
+					</div>
+
+					<!-- Select -->
+					<div class="col-md-4 col-xl-3">
+						<select class="form-select" aria-label="Default select example">
+							<option selected>Sort by</option>
+							<option value="1">Name</option>
+							<option value="2">Low to High Price</option>
+							<option value="3">Heigh to Low Price</option>
+						</select>
+					</div>
+
+            <div class="col-md-4 col-xl-3 d-grid d-xl-none">
+            <!-- Filter offcanvas button -->
+						<button class="btn btn-primary-soft btn-primary-check mb-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+							<i class="fas fa-sliders-h me-1"></i> Show filter
+						</button>
+            </div>
+				</form>
+				<!-- Search filter END -->
+
+				<!-- Product START -->
+				<div class="row g-4">
+
+                    {% for item in items %}
+                        <!-- Product item START -->
+                        <div class="col-sm-6 col-md-4">
+                            <div class="card border p-3 h-100">
+                                <div class="position-relative">
+                                    <!-- Image -->
+                                    <a href="{% url 'payment:item' item.id %}" class="position-relative z-index-9"><img class="card-img" src="{% if item.image %}{{ item.image.url }}{% else %}{% static "payment/images/no_image.png" %}{% endif %}" alt=""></a>
+                                </div>
+                                <!-- Card body -->
+                                <div class="card-body text-center p-3 px-0">
+                                    <!-- Title -->
+                                    <h5 class="card-title"><a href="{% url 'payment:item' item.id %}">{{ item.name }}</a></h5>
+                                    <h6 class="mb-0 text-success">{{ item.currency }}{{ item.price }}</h6>
+                                </div>
+
+                                <!-- Card footer -->
+                                <div class="card-footer text-center p-0">
+                                    <!-- Button -->
+                                    <form class="form-control-sm border-0" action="{% url 'cart:cart_add' item.id %}">
+                                        {{ cart_product_form }}
+                                        <p></p>
+                                        {% if request.user.is_authenticated %}
+                                            <button type="submit" class="btn btn-sm btn-primary-soft mb-0"><i class="bi bi-cart me-2"></i>Add to cart</button>
+                                            {% csrf_token %}
+                                        {% else %}
+                                            <a href="{% url 'payment:register' %}" class="btn btn-sm btn-primary-soft mb-0"><i class="bi bi-cart me-2"></i>Add to cart</a>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product item END -->
+                    {% endfor %}
+
+					<!-- Product item START -->
+					<div class="col-sm-6 col-md-4">
+						<div class="card border p-3 h-100">
+							<!-- Image -->
+							<a href="shop-detail.html"><img class="card-img" src="assets/images/shop/06.png" alt=""></a>
+
+							<!-- Card body -->
+							<div class="card-body text-center p-3 px-0">
+								<!-- Badge and price -->
+								<div class="d-flex justify-content-center mb-2">
+									<ul class="list-inline mb-0">
+										<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+										<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+										<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+										<li class="list-inline-item me-0 small"><i class="fas fa-star text-warning"></i></li>
+										<li class="list-inline-item me-0 small"><i class="fas fa-star-half-alt text-warning"></i></li>
+									</ul>
+								</div>
+								<!-- Title -->
+								<h5 class="card-title"><a href="shop-detail.html">Classic Boat Shoes</a></h5>
+								<div class="d-flex align-items-center justify-content-center">
+									<h6 class="text-success mb-0 me-2">$75</h6>
+									<small class="text-decoration-line-through">$95</small>
+								</div>
+							</div>
+
+							<!-- Card footer -->
+							<div class="card-footer text-center p-0">
+								<!-- Button -->
+								<a href="#" class="btn btn-sm btn-primary-soft mb-0"><i class="bi bi-cart me-2"></i>Add to cart</a>
+							</div>
+						</div>
+					</div>
+					<!-- Product item END -->
+
+					<!-- Pagination START -->
+					<div class="col-12">
+						<nav class="d-flex justify-content-center" aria-label="navigation">
+							<!-- Pagination 1 2 3  -->
+							<ul class="pagination pagination-bordered justify-content-center d-inline-block d-lg-flex">
+								<li class="page-item">
+									<a class="page-link" href="#">First</a>
+								</li>
+								<li class="page-item"><a class="page-link" href="#">1</a></li>
+								<li class="page-item active"><a class="page-link" href="#">2</a></li>
+								<li class="page-item disabled"><a class="page-link" href="#">..</a></li>
+								<li class="page-item"><a class="page-link" href="#">22</a></li>
+								<li class="page-item"><a class="page-link" href="#">23</a></li>
+								<li class="page-item">
+									<a class="page-link" href="#">Last</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+					<!-- Pagination END -->
+				</div>
+				<!-- Product END -->
+
+			</div>
+			<!-- Main part END -->
+		</div>
+	</div>
+</section>
+
 {% endblock %}

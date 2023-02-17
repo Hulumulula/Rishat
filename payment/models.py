@@ -3,8 +3,8 @@ from django.db import models
 
 class Item(models.Model):
     CURRENCY = [
-        ('EUR', 'eur'),
-        ('USD', 'usd'),
+        ('€', 'EUR'),
+        ('$', 'USD'),
     ]
     name = models.CharField(max_length=255, verbose_name='Название')
     description = models.TextField(verbose_name='Описание')

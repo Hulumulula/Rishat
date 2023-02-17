@@ -4,11 +4,12 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.views import LoginView
 
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import generic, View
 from django.conf import settings
 
+from cart.cart import Cart
 from cart.forms import CartAddItemForm
 from .forms import *
 from .models import *
@@ -77,6 +78,27 @@ class StripePaymentIntentView(View):
             return JsonResponse({"error": str(e)})
 
 
+def order_create(request):
+    cart = Cart(request)
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for item in cart:
+                OrderItem.objects.create(order=order,
+                                         item=item['product'],
+                                         price=item['price'],
+                                         quantity=item['quantity'])
+            # очистка корзины
+            cart.clear()
+            return render(request, 'payment/order-created.html',
+                          {'order': order})
+    else:
+        form = OrderCreateForm
+    return render(request, 'payment/order-create.html',
+                  {'cart': cart, 'form': form})
+
+
 class RegisterUser(generic.CreateView):
     form_class = RegisterUserForm
     template_name = 'payment/register.html'
@@ -94,7 +116,7 @@ class RegisterUser(generic.CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('home')
+        return redirect('payment:items')
 
 
 class LoginUser(LoginView):
